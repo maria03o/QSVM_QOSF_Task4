@@ -1,106 +1,150 @@
-# QSVM QOSF Task 4 – Quantum Support Vector Machine on Iris Dataset
+# QSVM QOSF Task 4 — Quantum Support Vector Machine on the Iris Dataset
 
-##  Project Overview
-This project implements and evaluates **Quantum Support Vector Machines (QSVMs)** for a binary classification problem using the Iris dataset. The goal is to explore how different quantum circuit architectures affect classification performance, decision boundaries, and expressibility.  
-
-This work is part of the QOSF Mentorship **Task 4: QSVM** screening task.
+Implementation and evaluation of **Quantum Support Vector Machines (QSVMs)** on a binary classification problem, comparing two quantum feature-map architectures against a classical SVM baseline. Built for the **QOSF Mentorship Program — Screening Task 4 (QSVM)**.
 
 ---
 
-##  Folder Structure
+## Table of Contents
+- [QSVM QOSF Task 4 — Quantum Support Vector Machine on the Iris Dataset](#qsvm-qosf-task-4--quantum-support-vector-machine-on-the-iris-dataset)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Project Structure](#project-structure)
+  - [Setup](#setup)
+  - [Methodology](#methodology)
+    - [1. Data Preparation](#1-data-preparation)
+    - [2. Classical Baseline](#2-classical-baseline)
+    - [3. Quantum Models](#3-quantum-models)
+  - [Results](#results)
+    - [Accuracy Comparison](#accuracy-comparison)
+    - [Figures](#figures)
+  - [Discussion](#discussion)
+  - [References](#references)
+
+---
+
+## Overview
+
+The task explores whether quantum kernel methods offer an advantage over classical SVMs on a simple, well-separated dataset, and how quantum circuit design (shallow vs. deep, entanglement structure) affects classification performance and decision boundaries.
+
+Two binary-classified Iris classes — **Setosa** and **Versicolor** — are used as the dataset, restricted to two features for direct 2D visualization of decision boundaries.
+
+---
+
+## Project Structure
+
 ```
 QSVM_QOSF_Task4/
-│
-├── README.md # Project overview, methods, and results
-├── qsvm_task4.ipynb # Main Jupyter notebook with code, figures, and explanations
-├── src/ # Source code modules
-│ ├── data_preprocessing.py # Data loading, filtering, normalization, splitting
-│ ├── qsvm_models.py # Quantum circuit definitions, QSVM kernel computation, training
-│ └── utils.py # Helper functions for plotting and evaluation
-├── figures/ # Generated figures and visualizations
-│ ├── iris_distribution.png
-│ ├── qsvm_train_boundary.png
-│ ├── qsvm_test_boundary.png
-│ ├── qsvm_alt_boundary.png
-│ └── performance_comparison.png
-└── requirements.txt # Python dependencies for reproducibility
+├── README.md
+├── requirements.txt
+├── notebooks/
+│   └── qsvm_task4.ipynb          # Main notebook: pipeline, figures, discussion
+├── src/
+│   └── qsvm_task4/
+│       ├── __init__.py
+│       ├── data_preprocessing.py # Loading, normalization, train/test split
+│       ├── qsvm_models.py        # Quantum feature maps, QSVM training/eval, classical baseline
+│       └── utils.py              # Decision boundary & performance plotting
+├── figures/
+│   ├── iris_distribution.png
+│   ├── qsvm1_train_fast.png
+│   ├── qsvm1_test_fast.png
+│   ├── qsvm2_train_fast.png
+│   ├── qsvm2_test_fast.png
+│   └── performance_comparison.png
+└── kernel_cache/
+    ├── grid_kernel_1.npy          # Cached fidelity kernel, QSVM Model 1
+    └── grid_kernel_2.npy          # Cached fidelity kernel, QSVM Model 2
 ```
 
+> Quantum kernel evaluation is the most expensive step in this pipeline. `kernel_cache/` stores precomputed kernel matrices so the notebook can be re-run without recomputing them from scratch — see `qsvm_models.py` for the caching logic.
 
 ---
 
-##  Methodology
+## Setup
 
-### 1️) Data Preparation
-- Selected two classes from the Iris dataset: **Setosa** and **Versicolor** for binary classification.  
-- Normalized features using `StandardScaler`.  
-- Split dataset into **training (80%)** and **testing (20%)** sets.  
-- Visualized feature distribution to explore separability.
+Requires **Python 3.11+**.
 
-### 2️) Classical Baseline
-- Trained a **classical SVM** on the normalized data to serve as a performance benchmark.  
-- Evaluated train/test accuracy and plotted decision boundaries.  
+```bash
+git clone https://github.com/<your-username>/QSVM_QOSF_Task4.git
+cd QSVM_QOSF_Task4
+pip install -r requirements.txt
+jupyter notebook notebooks/qsvm_task4.ipynb
+```
 
-### 3️) Quantum Models (QSVM)
-Two distinct quantum circuits were implemented:
-
-#### **QSVM Model 1 – Simple RY + CX Circuit**
-- 2-qubit circuit, parameterized with `RY` rotations.  
-- Single entangling layer using `CX`.  
-- Shallow and robust; suitable for linearly separable data.
-
-#### **QSVM Model 2 – RZ + CX + Layered Circuit**
-- 2-qubit circuit with `RZ` rotations and additional entanglement layers.  
-- Deeper and more expressive, able to capture more complex boundaries.  
-- Slightly higher risk of overfitting small datasets.
-
-- Computed **Fidelity Quantum Kernel** for both circuits.  
-- Trained **SVM with precomputed kernel**.  
-- Evaluated train/test accuracy, confusion matrices, and plotted decision boundaries.
-
----
-
-##  Results & Analysis
-
-- ### Training and Testing Accuracy
-| Model            | Train Accuracy (%) | Test Accuracy (%) |
-|-----------------|-----------------|----------------|
-| QSVM Model 1     | 91.25           | 85.0           |
-| QSVM Model 2     | 81.25           | 85.0           |
-| Classical SVM    | 98.75           | 100.0          |
-
-### Observations
-- The **classical SVM outperforms both QSVM models** on this dataset.  
-- Reason: The dataset is small and linearly separable; classical linear SVM is sufficient.  
-- QSVM Model 1 is shallow and robust, Model 2 is more expressive but slightly underfits on training data.  
-- Quantum kernels provide **nonlinear feature mapping**, which is more useful for complex or overlapping datasets.  
-- This demonstrates that **quantum models may not always outperform classical models on simple problems**, but they provide a framework for scaling to more complex scenarios.
-
-### Figures
-- `iris_distribution.png`: Scatter plot of features.  
-- `qsvm_train_boundary.png` / `qsvm_test_boundary.png`: Decision boundaries for QSVM Model 1.  
-- `qsvm_alt_boundary.png`: Decision boundary for QSVM Model 2.  
-- `performance_comparison.png`: Bar chart comparing models’ accuracy.
-
----
-
-##  Requirements
-Python 3.9 with the following packages:
+**`requirements.txt`:**
 ```
 qiskit
 qiskit-machine-learning
 scikit-learn
 numpy
+pandas
 matplotlib
 ```
 
-Install via:
-```bash
-pip install -r requirements.txt
-```
+---
 
-##  References
+## Methodology
+
+### 1. Data Preparation
+- Selected two linearly-related classes from Iris: **Setosa** and **Versicolor**.
+- Standardized features with `StandardScaler`.
+- Split into 80% train / 20% test (stratified).
+
+### 2. Classical Baseline
+- Trained a linear `SVC` on the same standardized features.
+- Used as the performance reference point for the quantum models.
+
+### 3. Quantum Models
+
+**QSVM Model 1 — Shallow RY + CX**
+A 2-qubit circuit using `RY` rotations for encoding, with a single `CX` entangling layer followed by a repeated `RY` layer. Shallow and robust — well suited to data that's already close to linearly separable.
+
+**QSVM Model 2 — Layered RZ + RY + CX**
+A deeper 2-qubit circuit combining `RY` and `RZ` rotations with a two-directional `CX` entangling structure. More expressive, at some cost to training accuracy on a small, simple dataset.
+
+Both circuits are used as feature maps for a `FidelityQuantumKernel`, which produces the kernel matrix passed to an `SVC(kernel="precomputed")`.
+
+---
+
+## Results
+
+### Accuracy Comparison
+
+| Model          | Train Accuracy | Test Accuracy |
+|----------------|:---:|:---:|
+| QSVM Model 1   | 91.25% | 85.0% |
+| QSVM Model 2   | 81.25% | 85.0% |
+| Classical SVM  | 98.75% | 100.0% |
+
+![Performance Comparison](figures/performance_comparison.png)
+
+### Figures
+
+| Figure | Description |
+|---|---|
+| `iris_distribution.png` | Scatter plot of the two Iris classes on the selected features |
+| `qsvm1_train_fast.png` | QSVM Model 1 decision boundary — training set |
+| `qsvm1_test_fast.png` | QSVM Model 1 decision boundary — test set |
+| `qsvm2_train_fast.png` | QSVM Model 2 decision boundary — training set |
+| `qsvm2_test_fast.png` | QSVM Model 2 decision boundary — test set |
+| `performance_comparison.png` | Train/test accuracy across all three models |
+
+---
+
+## Discussion
+
+The classical SVM outperforms both QSVMs on this dataset, which is expected given the setup:
+
+- The **Setosa vs. Versicolor** subset is small and close to linearly separable, so a linear classical kernel already captures the structure well — there's little room for a nonlinear quantum kernel to add value.
+- **QSVM Model 1** (shallow) generalizes better than Model 2 despite lower expressiveness, since the extra entanglement in Model 2 doesn't help on data this simple and instead makes optimization slightly less stable, reflected in its lower train accuracy.
+- Both QSVMs still reach 85% test accuracy, showing the fidelity kernel approach is functioning correctly — the gap to the classical baseline is a property of the dataset's simplicity, not a flaw in the quantum pipeline.
+
+**Takeaway:** this task illustrates a common and expected result in early QML exploration — quantum kernels are not guaranteed to outperform classical ones on simple, low-dimensional, near-linearly-separable data. Their potential advantage is expected to show up on higher-dimensional or genuinely nonlinearly-structured data, where classical kernels struggle more. This dataset serves as a controlled baseline to validate that the QSVM pipeline (feature map → fidelity kernel → precomputed-kernel SVM) is implemented correctly before scaling to harder problems.
+
+---
+
+## References
 
 - [Qiskit Machine Learning Documentation](https://qiskit.org/documentation/machine-learning/)
-- [Iris Dataset](https://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html)
-- [QOSF Mentorship Task 4 Description](https://qosf.slack.com/archives/C019UEZRCM9)
+- [Iris Dataset — scikit-learn](https://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html)
+- [QOSF Mentorship Program](https://qosf.org/qc_mentorship/)
