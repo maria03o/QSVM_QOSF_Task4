@@ -44,12 +44,7 @@ QSVM_QOSF_Task4/
 │       ├── qsvm_models.py        # Quantum feature maps, QSVM training/eval, classical baseline
 │       └── utils.py              # Decision boundary & performance plotting
 ├── figures/
-│   ├── iris_distribution.png
-│   ├── qsvm1_train_fast.png
-│   ├── qsvm1_test_fast.png
-│   ├── qsvm2_train_fast.png
-│   ├── qsvm2_test_fast.png
-│   └── performance_comparison.png
+|  
 └── kernel_cache/
     ├── grid_kernel_1.npy          # Cached fidelity kernel, QSVM Model 1
     └── grid_kernel_2.npy          # Cached fidelity kernel, QSVM Model 2
