@@ -16,7 +16,6 @@ Implementation and evaluation of **Quantum Support Vector Machines (QSVMs)** on 
     - [3. Quantum Models](#3-quantum-models)
   - [Results](#results)
     - [Accuracy Comparison](#accuracy-comparison)
-    - [Figures](#figures)
   - [Discussion](#discussion)
   - [References](#references)
 
