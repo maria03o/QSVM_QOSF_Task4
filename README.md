@@ -114,9 +114,9 @@ Both circuits are used as feature maps for a `FidelityQuantumKernel`, which prod
 |----------------|:---:|:---:|
 | QSVM Model 1   | 91.25% | 85.0% |
 | QSVM Model 2   | 81.25% | 85.0% |
-| Classical SVM  | 98.75% | 100.0% |
 
-![Performance Comparison](figures/performance_comparison.png)
+
+
 
 ### Figures
 
@@ -133,9 +133,6 @@ Both circuits are used as feature maps for a `FidelityQuantumKernel`, which prod
 
 ## Discussion
 
-The classical SVM outperforms both QSVMs on this dataset, which is expected given the setup:
-
-- The **Setosa vs. Versicolor** subset is small and close to linearly separable, so a linear classical kernel already captures the structure well — there's little room for a nonlinear quantum kernel to add value.
 - **QSVM Model 1** (shallow) generalizes better than Model 2 despite lower expressiveness, since the extra entanglement in Model 2 doesn't help on data this simple and instead makes optimization slightly less stable, reflected in its lower train accuracy.
 - Both QSVMs still reach 85% test accuracy, showing the fidelity kernel approach is functioning correctly — the gap to the classical baseline is a property of the dataset's simplicity, not a flaw in the quantum pipeline.
 
