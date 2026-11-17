@@ -116,19 +116,6 @@ Both circuits are used as feature maps for a `FidelityQuantumKernel`, which prod
 | QSVM Model 2   | 81.25% | 85.0% |
 
 
-
-
-### Figures
-
-| Figure | Description |
-|---|---|
-| `iris_distribution.png` | Scatter plot of the two Iris classes on the selected features |
-| `qsvm1_train_fast.png` | QSVM Model 1 decision boundary — training set |
-| `qsvm1_test_fast.png` | QSVM Model 1 decision boundary — test set |
-| `qsvm2_train_fast.png` | QSVM Model 2 decision boundary — training set |
-| `qsvm2_test_fast.png` | QSVM Model 2 decision boundary — test set |
-| `performance_comparison.png` | Train/test accuracy across all three models |
-
 ---
 
 ## Discussion
